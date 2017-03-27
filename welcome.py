@@ -9,12 +9,18 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
-from kivy.uix.scatter import Scatter
-from kivy.uix.popup import Popup
-from kivy.factory import Factory
+# from kivy.uix.scatter import Scatter
+# from kivy.uix.popup import Popup
+# from kivy.factory import Factory
 # from kivy.properties import ObjectProperty
 
 from kivy.uix.progressbar import ProgressBar
+from kivy.uix.image import Image
+from kivy.animation import Animation
+from kivy.clock import Clock
+
+
+
 from threading import Thread
 from multiprocessing import Process, Queue
 from time import sleep
@@ -28,17 +34,38 @@ import pre_works_train as phase1
 
 
 
+class splashClass(FloatLayout):
+	"""docstring for splashClass"""
+	def callSecondScreen(self, *args):
+		self.clear_widgets()
+		self.add_widget( secondClass())
 
 
-# class PopupBox(Popup):
-# 	pop_up_text = ObjectProperty()
-# 	def update_pop_up_text(self, p_message):
-# 		self.pop_up_text.text = p_message
+	def secondSplash(self,  *args):
+		self.clear_widgets()
+		label = Label(text="Coloriser", font_size=80, color=[1,1,1,0])
+		self.add_widget(label)
+		def hide_label(w): 
+		 	w.hidden = True
+		Animation(color=[1,1,1,1], duration=3, t='in_out_cubic').start(label)
+		Clock.schedule_once(self.callSecondScreen, 4)
 
+	def __init__(self, **kwargs):
+		super(splashClass, self).__init__(**kwargs)
+
+		# Splash Screen
+		wing = Image(source='./splash.png',pos=(800,800))
+		animation = Animation(x=0, y=0, d=2, t='out_bounce');
+		animation.start(wing)
+
+		Clock.schedule_once(self.secondSplash, 5)
+		self.add_widget(wing)
+		return 
 
 class secondClass(BoxLayout):
 	path = './dataset/train'
 	def __init__(self, **kwargs):
+		# self.path = './dataset/train'
 		super(secondClass, self).__init__(**kwargs)
 
 
@@ -46,10 +73,10 @@ class secondClass(BoxLayout):
 		self.path = self.ids.pathInput.text
 		print("New PATH: ",self.path)
 
-	def sublu(self,	queue):
+	def sublu(self,	queue ):
 		# pid=os.fork()
 		# if pid:
-		phase1.begin_threaded_execution(queue)
+		phase1.begin_threaded_execution(queue, self.path)
 
 
 	def begin_phase_1(self):
@@ -93,27 +120,8 @@ class ColoriserGUIApp(App):
 	def build(self):
 		# return PreWorksTrain(orientation="vertical")
 		# print("THE GREAT FATHER")
-		return secondClass()
+		return splashClass()
 
 if __name__ == '__main__':
 	ColoriserGUIApp().run()
 
-
-# class LoginScreen(FloatLayout):
-
-# 	def __init__(self, **kwargs):
-# 		super(LoginScreen, self).__init__(**kwargs)
-# 		f = FloatLayout()
-# 		s = Scatter()
-# 		l = Label(text = "HELLO", font_size=150)
-# 		s.add_widget(l)
-# 		self.add_widget(s)
-# 		# Button(text = "HELLO", background_color = (0, 0, 1, 1), font_size=150)
-# 		return
-
-# class BaseScreen(PageLayout):
-# 			"""docstring for BaseScreen"""
-# 			def __init__(self, **kwargs):
-# 				super(BaseScreen, self).__init__(**kwargs)
-# 				# l = Label(text = "HELLO", font_size=150)
-# 				# self.add_widget(l)

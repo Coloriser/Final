@@ -25,8 +25,8 @@ def get_image_paths(path="dataset/train"):
 
 
 
-def begin_threaded_execution(output_queue):
-    image_paths = get_image_paths()
+def begin_threaded_execution(output_queue, path):
+    image_paths = get_image_paths(path)
 
     No_of_images = len( image_paths )
     # No_of_cores = mp.cpu_count()
