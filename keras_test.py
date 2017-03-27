@@ -1,10 +1,14 @@
 from __future__ import division, print_function, absolute_import
 
-import tflearn
-from tflearn.layers.core import input_data, dropout, fully_connected
-from tflearn.layers.conv import conv_2d, max_pool_2d
-from tflearn.layers.normalization import local_response_normalization
-from tflearn.layers.estimator import regression
+import keras
+from keras.datasets import mnist
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Conv2D, MaxPooling2D, Convolution2D
+from keras import backend as K
+
+from keras.models import load_model
+
 
 import numpy as np
 import pickle
@@ -18,6 +22,9 @@ import helper_functions as hf
 
 # x=[]
 # y=[]
+# to dp : https://github.com/shekkizh/Colorization.tensorflow
+
+
 
 def parse_arguments():                      #argument parser -d for the pathlist
     parser = argparse.ArgumentParser(description='Tests the model, to be used after creating the model. To run in ab mode, run in -a and -b first')
@@ -37,74 +44,30 @@ def load_b_model():
     print("Loading 'b' model")
     return load_model("model/b_channel.model")
 
-def load_model(path):
-    # global x,y
-    #importing shapes from file
-    x, y = hf.import_shape_from_pickle( )
-
-    # Building convolutional network
-    network = input_data(shape=[None, x[1], x[2], 1], name='input')
-    print(network)
-    
-    network = fully_connected(network, 128, activation='sigmoid')
-    network = dropout(network, 0.8)
-    print(network)
-    #2
-    network = fully_connected(network, 128, activation='sigmoid')
-    network = dropout(network, 0.8)
-    print(network)
-    #3
-    network = fully_connected(network, 128, activation='sigmoid')
-    network = dropout(network, 0.8)
-    print(network)
-    #4
-    network = fully_connected(network, 128, activation='sigmoid')
-    network = dropout(network, 0.8)
-    #5
-    network = fully_connected(network, 128, activation='sigmoid')
-    network = dropout(network, 0.8)
-    #6
-    network = fully_connected(network, 128, activation='sigmoid')
-    network = dropout(network, 0.8)
-    #7
-    network = fully_connected(network, 128, activation='sigmoid')
-    network = dropout(network, 0.8)
-    #8
-    network = fully_connected(network, 128, activation='sigmoid')
-    network = dropout(network, 0.8)
-    #9
-    network = fully_connected(network, 128, activation='sigmoid')
-    network = dropout(network, 0.8)
-    #10
-    network = fully_connected(network, 128, activation='sigmoid')
-    network = dropout(network, 0.8)
-
-    network = fully_connected(network, y[1], activation='sigmoid')
-    network = regression(network, optimizer='adam', learning_rate=0.01,
-                         loss='categorical_crossentropy', name='target')
-
-
-
-    model = tflearn.DNN(network)
-    model.load(path)
-    return model
 
 
 def prereq_load_and_compute( SIFT=False):
-    print("Loading feature paths")
-    if SIFT==True:
-        print("SIFT")
-        paths = hf.load_sift_paths('test')
+    # print("Loading feature paths")
+    # if SIFT==True:
+    #     print("SIFT")
+    #     paths = hf.load_sift_paths('test')
 
-    else:
-        print("BRISK")
-        paths = hf.load_brisk_paths('test')
-    print("loading features...")
-    features = hf.load_features(paths)
-    print(str(len(features)) + " items loaded.")    
-    print("Normalizing features")
-    modified_feature_arr = hf.normalize_array(features, mode = 'test')
-    No_Of_Test_Items = len(modified_feature_arr)    
+    # else:
+    #     print("BRISK")
+    #     paths = hf.load_brisk_paths('test')
+    # print("loading features...")
+    # features = hf.load_features(paths)
+    # print(str(len(features)) + " items loaded.")    
+    # print("Normalizing features")
+    # modified_feature_arr = hf.normalize_array(features, mode = 'test')
+    # No_Of_Test_Items = len(modified_feature_arr)    
+
+    l_channel_paths = hf.load_luminance_paths('test')
+    print("Loading Luma")
+    l_channel_chromas = hf.load_luminance(l_channel_paths)
+    print(str(len(l_channel_chromas)) + " items loaded.")
+    modified_feature_arr = l_channel_chromas
+    No_Of_Test_Items = len(modified_feature_arr)
 
 
     print("modifying the shape of input and output")
@@ -140,20 +103,20 @@ def predict_and_dump(test_x, mode):
 
     predictions = model.predict(test_x)
     print("Dumping predictions")
-    # empty_array = np.zeros((200,200))
+    empty_array = np.zeros((200,200))
     if(mode == 'a'):
         hf.save_blob(predictions, 'predicted_a_chroma')
         for i in range(len(predictions)):
             a_channel_chroma = hf.scale_image(predictions[i])
-             # print("a_channel_chroma", predictions_A[0][1])
-            # a_channel_chroma = a_channel_chroma*10
-            hf.reconstruct(luminance[i], a_channel_chroma,b_channel_chromas[i], i, 'A')
+            print("a_channel_chroma", a_channel_chroma)
+            a_channel_chroma = a_channel_chroma*20
+            hf.reconstruct(empty_array, a_channel_chroma,empty_array, i, 'A')
     if(mode == 'b'):
         hf.save_blob(predictions, 'predicted_b_chroma')    
         for i in range(len(predictions)):
             b_channel_chroma = hf.scale_image(predictions[i])
-            # b_channel_chroma = b_channel_chroma*10    
-            hf.reconstruct(luminance[i], a_channel_chromas[i],b_channel_chroma, i, 'B')
+            b_channel_chroma = b_channel_chroma*20
+            hf.reconstruct(empty_array, empty_array,b_channel_chroma, i, 'B')
     
 
 def main():

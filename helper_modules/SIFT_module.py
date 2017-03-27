@@ -5,6 +5,7 @@ import cv2 as cv
 
 
 def get_features(file_name):
+    # print file_name
     obj_original = cv.imread(path.join(file_name), cv.IMREAD_COLOR)
 
     # error check
@@ -21,6 +22,7 @@ def get_features(file_name):
     	print("ERROR: SIFT not found! cv2 version: ",cv.__version__)
 
     obj_keypoints, obj_descriptors = sift.detectAndCompute(obj,None)
+    # print obj_descriptors
 
     return obj_descriptors
 

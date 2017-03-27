@@ -17,21 +17,25 @@ print_files_command = "ls " + path
 # subprocess.call("echo Changing Directory: ", shell=True)
 # subprocess.call(change_dir_commmand, shell=True)
 
-print("Existing Structure")
-subprocess.call(print_files_command, shell=True)
+try:	
+	print("Existing Structure")
+	subprocess.call(print_files_command, shell=True)
 
-print("Changing resolution to 200x200")
-subprocess.call(change_resolution_command, shell=True)
+	print("Changing resolution to 200x200")
+	subprocess.call(change_resolution_command, shell=True)
 
-print("Deleting old files")
-subprocess.call(move_files_command, shell=True)
+	print("Deleting old files")
+	subprocess.call(move_files_command, shell=True)
 
-print("Renaming Files")
-subprocess.call(rename_files_command, shell=True)
+	print("Renaming Files")
+	subprocess.call(rename_files_command, shell=True)
 
-print("New Structure")
-subprocess.call(print_files_command, shell=True)
+	print("New Structure")
+	subprocess.call(print_files_command, shell=True)
 
-print("Renaming Old")
-subprocess.call(rename_old_command, shell=True)
-
+	print("Renaming Old")
+	subprocess.call(rename_old_command, shell=True)
+except:
+	print("ERROR ==> Create foldes old and new in the target folder")
+finally:
+	print("DONE")

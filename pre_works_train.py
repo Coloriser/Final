@@ -8,6 +8,7 @@ import sys
 sys.path.insert(0, './helper_modules')
 
 import pre_works_SIFT_train as pwt
+from threading import Thread
 # import pre_works_BRISK_train as pwt
 
 
@@ -24,12 +25,13 @@ def get_image_paths(path="dataset/train"):
 
 
 
-def begin_threaded_execution():
+def begin_threaded_execution(output_queue):
     image_paths = get_image_paths()
 
     No_of_images = len( image_paths )
-    No_of_cores = mp.cpu_count()
+    # No_of_cores = mp.cpu_count()
 
+    No_of_cores = 1
     # Check if multiprocessing is really necessary
     if No_of_images<No_of_cores:
         No_of_cores = 1
@@ -39,11 +41,12 @@ def begin_threaded_execution():
         print("No of cores     : " + str(No_of_cores))
 
         
+    # images_per_core = 10
     images_per_core = No_of_images / No_of_cores
     threads = []
 
     # Define an output queue
-    output = mp.Queue()
+    # output = mp.Queue()
 
     process_list = []
     for ith_core in range(No_of_cores):
@@ -56,14 +59,20 @@ def begin_threaded_execution():
         else:
             sub_array = image_paths[start_point:]
         print("Beginning execution of thread " + str(ith_core)  + " with " + str(len(sub_array)) + " images")
-        process_list.append(mp.Process(target=pwt.process_images, args=(sub_array, ith_core)))
+        process_list.append(Thread(target=pwt.process_images, args=(sub_array, ith_core, output_queue)))
 
     for p in process_list:
+        p.daemon = True
         p.start()
     for p in process_list:
-        p.join()    
+        p.join()
+
+    #delete start
+    # pwt.process_images(image_paths, 0, output_queue)
+    #delete end
+       
     print("Processing done, saving paths.")
     pwt.save_paths( image_paths )
     print(str( len(image_paths) ) + " images processed. Proceed to training.") 
-
-begin_threaded_execution()        
+    # exit()
+# begin_threaded_execution()        

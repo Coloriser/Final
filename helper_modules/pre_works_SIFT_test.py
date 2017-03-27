@@ -77,6 +77,7 @@ def process_images(image_paths, thread_no):
             a_channel_chroma = get_a_channel_chroma(image_paths[i])
             b_channel_chroma = get_b_channel_chroma(image_paths[i])
             l_channel_luminance = get_l_channel_luminance(image_paths[i])
+            # print sift_features
 
         except:
             print("Error")

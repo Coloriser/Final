@@ -20,6 +20,8 @@ sift_paths
 model/*
 dataset/train/*
 dataset/test/*
+gui/*
+gui
 
 brisk_features
 model

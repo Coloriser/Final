@@ -1,0 +1,144 @@
+<secondClass>:
+	orientation: 'vertical'
+	padding: 10
+	canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+	BoxLayout:
+		id:title
+		orientation: 'horizontal'
+		# canvas.before:
+	 #        Color:
+	 #            rgba: 1, 1, 0, 1
+	 #        Rectangle:
+	 #            pos: self.pos
+	 #            size: self.size
+		Label:
+			font_size: 75
+			text: "COLORISER"
+			valign: 'middle'
+			color: (0.3, 0.2, 0.2, 1)
+			size_hint_y: None
+			height: 75
+
+	BoxLayout:
+		id:description
+		orientation: 'horizontal'
+		size_hint_y: None
+		height: 90
+		padding: 0,20
+		# canvas.before:
+	 #        Color:
+	 #            rgba: 0, 1, 0, 1
+	 #        Rectangle:
+	 #            pos: self.pos
+	 #            size: self.size
+
+		Label:
+			font_size: 25
+			# text: 'self.pos: ' + str(self.pos) + "description.pos: " + str(description.pos ) 
+			text: " Phase 1 of the project. Select the path of the dataset to process."
+			valign: 'middle'
+			max_lines: 3
+			color: (0.3, 0.2, 0.2, 1)
+			size_hint_y: None
+			height: 40
+			
+	BoxLayout:
+		orientation: 'horizontal'
+		# padding: 0,3,5,3
+		spacing: 10
+		size_hint_y: None
+		height: 40
+		canvas.before:
+	        Color:
+	            rgba: 0.8, 0.8, 0.8, 1
+	        Rectangle:
+	            pos: self.pos
+	            size: self.size
+		id: secondBox
+		Label:
+		    font_hinting: 'light'        
+			id: luali
+			font_size: 20
+			max_lines: 1
+			text: "PATH"
+			valign: 'middle'
+			halign: 'right'
+			color: (0, 0, 0, 1)
+		TextInput:
+			multiline: False
+			valign: 'middle'	
+			id: pathInput
+			font_size: 20
+			height: 40
+			text: "./dataset/train"
+			on_text: root.pathset()
+
+	BoxLayout:
+		orientation: 'horizontal'
+		background_color: (1, 0, 1, 1)
+		padding: (root.width-100)/2 , 10
+		# canvas.before:
+	 #        Color:
+	 #            rgba: 1, 1, 0, 1
+	 #        Rectangle:
+	 #            pos: self.pos
+	 #            size: self.size
+		# pos_hint: {'center_x': 0.5}
+		Button:
+			size_hint_y: None
+			size_hint_x: None
+			# width: 30
+			id: beginButton 
+			height: 50
+			width: 100
+			text: "Begin"
+			font_size: 20
+			valign: 'middle'
+			halign: 'center'
+			on_press: root.begin_phase_1()
+
+	BoxLayout:
+		orientation: 'horizontal'
+		ProgressBar:
+			max: 100
+			id: progressBarIndicator
+		Label:
+			id: progressLabel
+			default: "disco"
+			text: "0 %"
+			color: (0, 0, 0, 1)
+
+	BoxLayout:
+		orientation: 'horizontal'
+		size_hint_y: None
+		height: 50
+		padding: 0,20
+		id: statusBox
+		Label:
+			id: statusBar
+			font_size: 15
+			text: " Ready..."
+			valign: 'middle'
+			max_lines: 1
+			color: (0.3, 0.2, 0.2, 1)
+			size_hint_y: None
+			height:10
+
+
+	
+# <PopupBox>:
+# 	pop_up_text: _pop_up_text
+# 	size_hint: .5, .5
+# 	auto_dismiss: True
+# 	title: 'Status'   
+
+# 	BoxLayout:
+# 		orientation: "vertical"
+# 		Label:
+# 			id: _pop_up_text
+# 			text: ''

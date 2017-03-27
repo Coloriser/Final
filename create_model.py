@@ -70,7 +70,7 @@ def make_model(x, y):
 
 	# Training
 	model = tflearn.DNN(network, tensorboard_verbose=2)
-	model.fit({'input': x}, {'target': y} , n_epoch=100)
+	model.fit({'input': x}, {'target': y} , n_epoch=10)
 
 	return model
 
@@ -87,12 +87,16 @@ def prereq_load_and_compute( mode , SIFT=False):
 	print(str(len(features)) + " items loaded.")	
 	print("Normalizing features")
 	modified_feature_arr = hf.normalize_array(features)
+	# print(modified_feature_arr[0])
+	# print(modified_feature_arr[1])
 	No_Of_Test_Items = len(modified_feature_arr)
 	
 	if mode=='a':
 		a_channel_paths = hf.load_a_channel_chroma_paths('train')
 		print("loading a channel chroma...")
 		a_channel_chromas = hf.load_a_channel_chroma(a_channel_paths)
+		# print(a_channel_chromas[0])
+		# print(a_channel_chromas[1])
 		print(str(len(a_channel_chromas)) + " items loaded.")	
 		train_y_channel = np.array(a_channel_chromas).reshape(No_Of_Test_Items,-1)
 

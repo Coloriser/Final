@@ -2,6 +2,7 @@ import SIFT_module as sift
 import numpy
 from extract_chroma import extract_a_channel,extract_b_channel,extract_l_channel
 import pickle
+from multiprocessing import Queue
 
 
 def get_sift_features(image_path):
@@ -55,7 +56,7 @@ def save_blob(content, path):
     f.close()
 
 
-def process_images(image_paths, thread_no):
+def process_images(image_paths, thread_no, output_queue):
 
     sift_paths = map(create_sift_path, image_paths)
     a_channel_chroma_paths = map(create_a_channel_chroma_path, image_paths)
@@ -65,11 +66,17 @@ def process_images(image_paths, thread_no):
     print ("Paths generated for thread " + str(thread_no))
 
     for i in range(len(image_paths)):
+        if(thread_no==0):
+            output_queue.put(int( ( float(i+1) / float(len(image_paths)) )*100))
+            # print()
 
-        print("Thread " + str(thread_no) + " working on " + str(i+1) + " out of " + str(len(image_paths)) + ' : ' + str(image_paths[i]))
+        # print("Thread " + str(thread_no) + " working on " + str(i+1) + " out of " + str(len(image_paths)) + ' : ' + str(image_paths[i]))
         try:
             sift_features = get_sift_features(image_paths[i])
             a_channel_chroma = get_a_channel_chroma(image_paths[i])
+            # if i==0 or i==1:
+            #     print sift_features
+            #     print a_channel_chroma
             b_channel_chroma = get_b_channel_chroma(image_paths[i])
             l_channel_luminance = get_l_channel_luminance(image_paths[i])
         except:
