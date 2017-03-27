@@ -70,7 +70,7 @@ def make_model(x, y):
 
 	# Training
 	model = tflearn.DNN(network, tensorboard_verbose=2)
-	model.fit({'input': x}, {'target': y} , n_epoch=10)
+	model.fit({'input': x}, {'target': y} , n_epoch=2)
 
 	return model
 
@@ -121,24 +121,24 @@ def prereq_load_and_compute( mode , SIFT=False):
 
 	return train_x, train_y_channel
 
-def make_a_model(  ):
+def make_a_model( callback ):
 
 	train_x, train_y_a_channel = prereq_load_and_compute( mode='a' , SIFT=True)
 
 	print("Generating A channel model")
 	model_a_channel = make_model(train_x, train_y_a_channel)
-	model_a_channel.save("model/a_channel.model")
-
-def make_b_model():
+	model_a_channel.save("./model/a_channel.model")
+	return callback('a')
+def make_b_model(callback):
 
 	train_x, train_y_b_channel = prereq_load_and_compute( mode='b' , SIFT=True)
 
 	print("Generating B channel model")
 	model_b_channel = make_model(train_x, train_y_b_channel)
-	model_b_channel.save("model/b_channel.model")
+	model_b_channel.save("./model/b_channel.model")
+	return callback('b')
 
-
-def main():
+def to_call():
 	args = parse_arguments()
 	# print(args)
 	if args.a:
@@ -150,4 +150,4 @@ def main():
 	if not args.a and not args.b:
 		print("ERROR: use -h for HELP")
 
-main()
+# main()

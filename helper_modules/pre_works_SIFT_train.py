@@ -56,7 +56,7 @@ def save_blob(content, path):
     f.close()
 
 
-def process_images(image_paths, thread_no, output_queue):
+def process_images(image_paths, thread_no, updateFn):
 
     sift_paths = map(create_sift_path, image_paths)
     a_channel_chroma_paths = map(create_a_channel_chroma_path, image_paths)
@@ -67,7 +67,7 @@ def process_images(image_paths, thread_no, output_queue):
 
     for i in range(len(image_paths)):
         if(thread_no==0):
-            output_queue.put(int( ( float(i+1) / float(len(image_paths)) )*100))
+            updateFn(int( ( float(i+1) / float(len(image_paths)) )*100))
             # print()
 
         # print("Thread " + str(thread_no) + " working on " + str(i+1) + " out of " + str(len(image_paths)) + ' : ' + str(image_paths[i]))

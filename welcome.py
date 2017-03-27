@@ -21,15 +21,15 @@ from kivy.clock import Clock
 
 
 
-from threading import Thread
+from threading import Thread,Event
 from multiprocessing import Process, Queue
 from time import sleep
 import os
 
-import sys
-sys.path.insert(0, './../')
+# import sys
+# sys.path.insert(0, './..')
 import pre_works_train as phase1
-
+import create_model as phase2
 
 
 
@@ -62,65 +62,95 @@ class splashClass(FloatLayout):
 		self.add_widget(wing)
 		return 
 
+
+
 class secondClass(BoxLayout):
 	path = './dataset/train'
 	def __init__(self, **kwargs):
 		# self.path = './dataset/train'
 		super(secondClass, self).__init__(**kwargs)
 
-
 	def pathset(self):
 		self.path = self.ids.pathInput.text
 		print("New PATH: ",self.path)
 
-	def sublu(self,	queue ):
+	def callBack(self, image_no):
+		self.ids.statusBar.text = "Preprocessing of "+image_no+" images complete."
+		self.ids.nextBut.disabled = False
+
+	def updateBar(self, x):
+		self.ids.progressBarIndicator.value = x
+		self.ids.progressLabel.text = str(x) + '%'
+		
+
+	def sublu(self ):
 		# pid=os.fork()
 		# if pid:
-		phase1.begin_threaded_execution(queue, self.path)
+		callBack_to_call = self.callBack
+		callBack_to_update = self.updateBar
+		Thread( target = phase1.begin_threaded_execution, args=(callBack_to_call, self.path, callBack_to_update)).start()
 
+		# phase1.begin_threaded_execution(queue, self.path)
+
+	def callThirdScreen(self, *args):
+		self.clear_widgets()
+		# print("Great Father")
+		self.add_widget( thirdClass())	
 
 	def begin_phase_1(self):
 		queue = Queue()
 		queue.put(0)
-		# b = BoxLayout(orientation="horizontal")
-		# but = ProgressBar(max=100)
-		# but.id = progressBarIndicator
-		# b.add_widget(but)
-		# self.add_widget(b)
-		# self.pop_up = Factory.PopupBox()
-		# self.pop_up.update_pop_up_text('Running some task...')
-		# self.pop_up.open()
-		# print("ORIG",os.getpid())
 		self.ids.progressLabel.text = "begin disco"
-		# pid = os.fork()
-		# if not pid:
-		pre_works_process = Process(target=self.sublu, args=((queue),))
-		pre_works_process.daemon = True
-		pre_works_process.start()
-			# phase1.begin_threaded_execution(queue)
-		# else:
-		print("Done")
-		self.ids.progressLabel.text = "awesome disco"
-		while True:
-			x = queue.get()
-			print(x)
-			self.ids.progressBarIndicator.value = x
-			self.ids.progressLabel.text = str(x) + '%'
-			# sleep(1)
-			if x==100:
-				break
+		self.ids.statusBar.text = "Preprocessing  .  .  ."
+		self.ids.nextBut.disabled = True
 		self.ids.beginButton.disabled = True		
-		self.ids.statusBar.text = "Preprocessing complete. Proceed to next step?"
-		b = Button(text="Next")
-		self.ids.statusBox.add_widget(b)
+		self.sublu()
+
+class thirdClass( BoxLayout ):
+	"""docstring for thirdClass"""
+	def __init__(self, **kwargs):
+		super(thirdClass, self).__init__(**kwargs)
+
+	def callBack(self, model_name):
+		self.ids.statusBox.text = "Model " + model_name +" created"
+		self.ids.a_model_but.disabled = False
+		self.ids.b_model_but.disabled = False
+		self.ids.nextBut.disabled = False
+		self.ids.backBut.disabled = False
+
+
+	def callSecondScreen(self, *args):
+		self.clear_widgets()
+		# print("Great Father")
+		self.add_widget( secondClass() ) 	
+		
+
+	def begin_phase_2a(self):
+		callBack_to_call = self.callBack
+		self.ids.a_model_but.disabled = True
+		self.ids.b_model_but.disabled = True
+		self.ids.nextBut.disabled = True
+		self.ids.backBut.disabled = True
+		Thread( target = phase2.make_a_model, args=((callBack_to_call),)).start()
+		self.ids.statusBox.text = "Creating a_model"
+		
+	def begin_phase_2b(self):
+		callBack_to_call = self.callBack
+		self.ids.a_model_but.disabled = True
+		self.ids.b_model_but.disabled = True
+		self.ids.nextBut.disabled = True
+		self.ids.backBut.disabled = True
+		Thread( target = phase2.make_b_model, args=((callBack_to_call),)).start()
+		self.ids.statusBox.text = "Creating b_model"
+
 
 class ColoriserGUIApp(App):
 
 
 	def build(self):
-		# return PreWorksTrain(orientation="vertical")
-		# print("THE GREAT FATHER")
 		return splashClass()
+		# return secondClass()
+		# return thirdClass()
 
 if __name__ == '__main__':
 	ColoriserGUIApp().run()
