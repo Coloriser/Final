@@ -61,7 +61,8 @@ def get_l_channel_luminance(image_path):
     return extract_l_channel(image_path)
 
 
-def process_images(image_paths, thread_no):
+def process_images(image_paths, thread_no, updateFn):
+
 
     sift_paths = map(create_sift_path, image_paths)
     a_channel_chroma_paths = map(create_a_channel_chroma_path, image_paths)
@@ -71,6 +72,11 @@ def process_images(image_paths, thread_no):
     print ("Paths generated for thread " + str(thread_no))
 
     for i in range(len(image_paths)):
+        if(thread_no==0):
+            val = int( ( float(i+1) / float(len(image_paths)) )*100)
+            updateFn(val)
+            # print()
+
         print("Thread " + str(thread_no) + " working on " + str(i+1) + " out of " + str(len(image_paths)) + ' : ' + str(image_paths[i]))
         try:
             sift_features = get_sift_features(image_paths[i])

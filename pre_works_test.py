@@ -8,6 +8,8 @@ import sys
 sys.path.insert(0, './helper_modules')
 
 import pre_works_SIFT_test as pwt
+from threading import Thread
+
 # import pre_works_BRISK_test as pwt
 
 
@@ -23,8 +25,8 @@ def get_image_paths(path='./dataset/test'):
     return image_paths
 
 
-def begin_threaded_execution():
-    image_paths = get_image_paths()
+def begin_threaded_execution( callbackFn, path, updateFn ):
+    image_paths = get_image_paths(path)
 
     No_of_images = len( image_paths )
     No_of_cores = mp.cpu_count()
@@ -52,14 +54,16 @@ def begin_threaded_execution():
         else:
             sub_array = image_paths[start_point:]
         print("Beginning execution of thread " + str(ith_core)  + " with " + str(len(sub_array)) + " images")
-        process_list.append(mp.Process(target=pwt.process_images, args=(sub_array, ith_core)))
+        process_list.append(Thread(target=pwt.process_images, args=(sub_array, ith_core, updateFn)))
 
     for p in process_list:
+        p.daemon = True
         p.start()
     for p in process_list:
         p.join()    
     print("Processing done, saving paths.")
     pwt.save_paths( image_paths )
     print(str( len(image_paths) ) + " images processed. Proceed to testing.") 
+    return callbackFn(str( len(image_paths)))
 
-begin_threaded_execution()        
+# begin_threaded_execution()        

@@ -1,263 +1,393 @@
 <secondClass>:
-	orientation: 'vertical'
-	padding: 10
-	canvas.before:
-		Color:
-			rgba: 0.9, 0.9, 0.9, 1
-		Rectangle:
-			pos: self.pos
-			size: self.size
 	BoxLayout:
-		id:title
-		orientation: 'horizontal'
-		size_hint: (1, 0.3)
-		# canvas.before:
-	 #		Color:
-	 #			rgba: 1, 1, 0, 1
-	 #		Rectangle:
-	 #			pos: self.pos
-	 #			size: self.size
-		Label:
-			font_size: 75
-			text: "COLORISER"
-			valign: 'middle'
-			color: (0.3, 0.2, 0.2, 1)
-			# size_hint_y: None
-			height: 75
-
-	BoxLayout:
-		id:description
-		orientation: 'horizontal'
-		size_hint: (1, 0.2)
-		# height: 90
-		padding: 0,20
-		# canvas.before:
-	 #		Color:
-	 #			rgba: 0, 1, 0, 1
-	 #		Rectangle:
-	 #			pos: self.pos
-	 #			size: self.size
-
-		Label:
-			font_size: 25
-			# text: 'self.pos: ' + str(self.pos) + "description.pos: " + str(description.pos ) 
-			text: " Phase 1 of the project. Select the path of the dataset to process."
-			valign: 'middle'
-			max_lines: 3
-			color: (0.3, 0.2, 0.2, 1)
-			# size_hint_y: None
-			# height: 40
-			
-	BoxLayout:
-		orientation: 'horizontal'
-		# padding: 0,3,5,3
-		spacing: 10
-		size_hint: (1, 0.1)
-		# height: 40
-		canvas.before:
-			Color:
-				rgba: 0.8, 0.8, 0.8, 1
-			Rectangle:
-				pos: self.pos
-				size: self.size
-		id: secondBox
-		Label:
-			font_hinting: 'light'		
-			id: luali
-			font_size: 20
-			max_lines: 1
-			text: "Path to dataset"
-			valign: 'middle'
-			halign: 'right'
-			color: (0, 0, 0, 1)
-			size_hint: (0.5,1)
-
-		TextInput:
-			multiline: False
-			valign: 'middle'	
-			id: pathInput
-			font_size: 20
-			# height: 40
-			text: "./dataset/train"
-			on_text: root.pathset()
-			size_hint: (0.5,1)
-
-	BoxLayout:
-		orientation: 'horizontal'
-		background_color: (1, 0, 1, 1)
-		padding: (root.width-150)/2 , 10
-		size_hint: (1, 0.2)
-		# canvas.before:
-	 #		Color:
-	 #			rgba: 1, 1, 0, 1
-	 #		Rectangle:
-	 #			pos: self.pos
-	 #			size: self.size
-		# pos_hint: {'center_x': 0.5}
-		Button:
-			# size_hint_y: None
-			# size_hint_x: None
-			# width: 30
-			id: beginButton 
-			# height: 30
-			# width: 100
-			text: "Begin"
-			# font_size: 20
-			valign: 'middle'
-			halign: 'center'
-			on_press: root.begin_phase_1()
-
-	BoxLayout:
-		orientation: 'horizontal'
-		size_hint: (1, 0.1)
-		ProgressBar:
-			max: 100
-			id: progressBarIndicator
-		Label:
-			id: progressLabel
-			default: "disco"
-			text: "0 %"
-			color: (0, 0, 0, 1)
-
-	BoxLayout:
-		orientation: 'horizontal'
-		size_hint: (1, 0.1)
-		# size_hint_y: None
-		# height: 50
-		# padding: 0,20
-		id: statusBox
-		
-		Label:
-			id: statusBar
-			# font_size: 15
-			text: " Ready..."
-			valign: 'middle'
-			max_lines: 1
-			color: (0.3, 0.2, 0.2, 1)
-			# size_hint_y: None
-			size_hint: (0.8,1)
-			# height:10
-		Button:
-			id: nextBut
-			size_hint: (0.2,1)
-			background_color: [0.3, 0.3, 0.3, 0.7]
-			text: "Next"	
-			on_press: root.callThirdScreen()
-
-
-<thirdClass>:
-	orientation: 'vertical'
-	padding: 10
-	spacing: 10
-	canvas.before:
-		Color:
-			rgba: 0.9, 0.9, 0.9, 1
-		Rectangle:
-			pos: self.pos
-			size: self.size
-	BoxLayout:
-		id:title1
-		orientation: 'horizontal'
-		size_hint: (1,0.4)
-		height: 25
-		# canvas.before:
-		# 	Color:
-		# 		rgba: 1, 1, 0, 1
-		# 	Rectangle:
-		# 		pos: self.pos
-		# 		size: self.size
-		Label:
-			font_size: 75
-			text: "COLORISER"
-			valign: 'middle'
-			color: (0.3, 0.2, 0.2, 1)
-	BoxLayout:
-		id:description1
-		orientation: 'horizontal'
-		padding: 0,20
-		size_hint: (1,0.3)
-		# canvas.before:
-		# 	Color:
-		# 		rgba: 0, 1, 0, 1
-		# 	Rectangle:
-		# 		pos: self.pos
-		# 		size: self.size
-		Label:
-			font_size: 25
-			# text: 'self.pos: ' + str(self.pos) + "description.pos: " + str(description.pos ) 
-			text: " Phase 2 of the project. Patience is the key to succeed this phase."
-			valign: 'middle'
-
-			max_lines: 3
-			color: (0.3, 0.2, 0.2, 1)
-			height: 40		
-
-	BoxLayout:
-		orientation: 'horizontal'
-		# padding: 0,3,5,3
-		spacing: 10
-		size_hint: (1,0.2)
-		height: 40
-		id: secondBox
+		orientation: 'vertical'
+		padding: 10
 		canvas.before:
 			Color:
 				rgba: 0.9, 0.9, 0.9, 1
 			Rectangle:
 				pos: self.pos
 				size: self.size
-		Button:
-			id: a_model_but
-			font_size: 20
-			text: "Create_model_a"
-			valign: 'middle'
-			halign: 'right'
-			color: (1, 1, 1, 1)
-			on_press: root.begin_phase_2a()
-		Button:
-			id: b_model_but
-			font_size: 20
-			text: "Create_model_b"
-			valign: 'middle'
-			halign: 'right'
-			color: (1, 1, 1, 1)
-			on_press: root.begin_phase_2b()
-	BoxLayout:
-		orientation: 'horizontal'
-		# padding: 0,3,5,3
-		spacing: 10
-		size_hint: (1,0.1)
-		height: 40
-		Button:
-			size_hint: (0.2,1)
-			background_color: [0.3, 0.3, 0.3, 0.7]
-			text: "Back"	
-			on_press: root.callSecondScreen()
-			id: backBut
-			
-		Label:
-			id: statusBox
-			size_hint: (0.6,1)
-			text: "Ready"	
-			color: (0, 0, 0, 1)
-		Button:
-			size_hint: (0.2,1)
-			background_color: [0.3, 0.3, 0.3, 0.7]
-			text: "Next"
-			id: nextBut
+		BoxLayout:
+			id:title
+			orientation: 'horizontal'
+			size_hint: (1, 0.3)
+			Label:
+				font_size: 75
+				text: "COLORISER"
+				valign: 'middle'
+				color: (0.3, 0.2, 0.2, 1)
+				# size_hint_y: None
+				height: 75
 
+		BoxLayout:
+			id:description
+			orientation: 'horizontal'
+			size_hint: (1, 0.2)
+			# height: 90
+			padding: 0,20
+			# canvas.before:
+		 #		Color:
+		 #			rgba: 0, 1, 0, 1
+		 #		Rectangle:
+		 #			pos: self.pos
+		 #			size: self.size
+
+			Label:
+				font_size: 25
+				# text: 'self.pos: ' + str(self.pos) + "description.pos: " + str(description.pos ) 
+				text: " Phase 1 of the project. Select the path of the dataset to process."
+				valign: 'middle'
+				max_lines: 3
+				color: (0.3, 0.2, 0.2, 1)
+				# size_hint_y: None
+				# height: 40
 				
-	
+		BoxLayout:
+			orientation: 'horizontal'
+			# padding: 0,3,5,3
+			spacing: 10
+			size_hint: (1, 0.1)
+			# height: 40
+			canvas.before:
+				Color:
+					rgba: 0.8, 0.8, 0.8, 1
+				Rectangle:
+					pos: self.pos
+					size: self.size
+			id: secondBox
+			Label:
+				font_hinting: 'light'		
+				id: luali
+				font_size: 20
+				max_lines: 1
+				text: "Path to dataset"
+				valign: 'middle'
+				halign: 'right'
+				color: (0, 0, 0, 1)
+				size_hint: (0.5,1)
+
+			TextInput:
+				multiline: False
+				valign: 'middle'	
+				id: pathInput
+				font_size: 20
+				# height: 40
+				text: "./dataset/train"
+				on_text: root.pathset()
+				size_hint: (0.5,1)
+
+		BoxLayout:
+			orientation: 'horizontal'
+			background_color: (1, 0, 1, 1)
+			padding: (root.width-150)/2 , 10
+			size_hint: (1, 0.2)
+			Button:
+				id: beginButton 
+				text: "Begin"
+				valign: 'middle'
+				halign: 'center'
+				on_press: root.begin_phase_1()
+
+		BoxLayout:
+			orientation: 'horizontal'
+			size_hint: (1, 0.1)
+			ProgressBar:
+				max: 100
+				id: progressBarIndicator
+			Label:
+				id: progressLabel
+				default: "disco"
+				text: "0 %"
+				color: (0, 0, 0, 1)
+
+		BoxLayout:
+			orientation: 'horizontal'
+			size_hint: (1, 0.1)
+			# size_hint_y: None
+			# height: 50
+			# padding: 0,20
+			id: statusBox
+			
+			Label:
+				id: statusBar
+				# font_size: 15
+				text: " Ready..."
+				valign: 'middle'
+				max_lines: 1
+				color: (0.3, 0.2, 0.2, 1)
+				# size_hint_y: None
+				size_hint: (0.8,1)
+				# height:10
+			Button:
+				id: nextBut
+				size_hint: (0.2,1)
+				background_color: [0.3, 0.3, 0.3, 0.7]
+				text: "Next"	
+				# on_press: root.callThirdScreen()
+				on_press:
+					root.manager.transition.direction = 'left'
+	                root.manager.current = 'third_screen'
 
 
-	
-# <PopupBox>:
-# 	pop_up_text: _pop_up_text
-# 	size_hint: .5, .5
-# 	auto_dismiss: True
-# 	title: 'Status'   
+<thirdClass>:
+	BoxLayout:
+		orientation: 'vertical'
+		padding: 10
+		spacing: 10
+		canvas.before:
+			Color:
+				rgba: 0.9, 0.9, 0.9, 1
+			Rectangle:
+				pos: self.pos
+				size: self.size
+		BoxLayout:
+			id:title1
+			orientation: 'horizontal'
+			size_hint: (1,0.4)
+			height: 25
+			# canvas.before:
+			# 	Color:
+			# 		rgba: 1, 1, 0, 1
+			# 	Rectangle:
+			# 		pos: self.pos
+			# 		size: self.size
+			Label:
+				font_size: 75
+				text: "COLORISER"
+				valign: 'middle'
+				color: (0.3, 0.2, 0.2, 1)
+		BoxLayout:
+			id:description1
+			orientation: 'horizontal'
+			padding: 0,20
+			size_hint: (1,0.3)
+			# canvas.before:
+			# 	Color:
+			# 		rgba: 0, 1, 0, 1
+			# 	Rectangle:
+			# 		pos: self.pos
+			# 		size: self.size
+			Label:
+				font_size: 25
+				# text: 'self.pos: ' + str(self.pos) + "description.pos: " + str(description.pos ) 
+				text: " Phase 2 of the project. Patience is the key to succeed this phase."
+				valign: 'middle'
 
-# 	BoxLayout:
-# 		orientation: "vertical"
-# 		Label:
-# 			id: _pop_up_text
-# 			text: ''
+				max_lines: 3
+				color: (0.3, 0.2, 0.2, 1)
+				height: 40		
+
+		BoxLayout:
+			orientation: 'horizontal'
+			# padding: 0,3,5,3
+			spacing: 10
+			size_hint: (1,0.2)
+			height: 40
+			id: secondBox
+			canvas.before:
+				Color:
+					rgba: 0.9, 0.9, 0.9, 1
+				Rectangle:
+					pos: self.pos
+					size: self.size
+			Button:
+				id: a_model_but
+				font_size: 20
+				text: "Create_model_a"
+				valign: 'middle'
+				halign: 'right'
+				color: (1, 1, 1, 1)
+				on_press: root.begin_phase_2a()
+			Button:
+				id: b_model_but
+				font_size: 20
+				text: "Create_model_b"
+				valign: 'middle'
+				halign: 'right'
+				color: (1, 1, 1, 1)
+				on_press: root.begin_phase_2b()
+		BoxLayout:
+			orientation: 'horizontal'
+			# padding: 0,3,5,3
+			spacing: 10
+			size_hint: (1,0.1)
+			height: 40
+			Button:
+				size_hint: (0.2,1)
+				background_color: [0.3, 0.3, 0.3, 0.7]
+				text: "Back"	
+	            id: backBut
+				on_press:
+					root.manager.transition.direction = 'right'
+	                root.manager.current = 'second_screen'
+
+			Label:
+				id: statusBox
+				size_hint: (0.6,1)
+				text: "Ready"	
+				color: (0, 0, 0, 1)
+			Button:
+				size_hint: (0.2,1)
+				background_color: [0.3, 0.3, 0.3, 0.7]
+				text: "Next"
+				id: nextBut
+				on_press:
+					root.manager.transition.direction = 'left'
+	                root.manager.current = 'fourth_screen'
+
+
+
+<fourthClass>:
+	BoxLayout:
+		orientation: 'vertical'
+		padding: 10
+		canvas.before:
+			Color:
+				rgba: 0.9, 0.9, 0.9, 1
+			Rectangle:
+				pos: self.pos
+				size: self.size
+		BoxLayout:
+			id:title
+			orientation: 'horizontal'
+			size_hint: (1, 0.3)
+			# canvas.before:
+		 #		Color:
+		 #			rgba: 1, 1, 0, 1
+		 #		Rectangle:
+		 #			pos: self.pos
+		 #			size: self.size
+			Label:
+				font_size: 75
+				text: "COLORISER"
+				valign: 'middle'
+				color: (0.3, 0.2, 0.2, 1)
+				# size_hint_y: None
+				height: 75
+
+		BoxLayout:
+			id:description
+			orientation: 'horizontal'
+			size_hint: (1, 0.2)
+			# height: 90
+			padding: 0,20
+			# canvas.before:
+		 #		Color:
+		 #			rgba: 0, 1, 0, 1
+		 #		Rectangle:
+		 #			pos: self.pos
+		 #			size: self.size
+
+			Label:
+				font_size: 25
+				# text: 'self.pos: ' + str(self.pos) + "description.pos: " + str(description.pos ) 
+				text: " Phase 3 of the project. Select the path of the testing dataset to process."
+				valign: 'middle'
+				max_lines: 3
+				color: (0.3, 0.2, 0.2, 1)
+				# size_hint_y: None
+				# height: 40
+				
+		BoxLayout:
+			orientation: 'horizontal'
+			# padding: 0,3,5,3
+			spacing: 10
+			size_hint: (1, 0.1)
+			# height: 40
+			canvas.before:
+				Color:
+					rgba: 0.8, 0.8, 0.8, 1
+				Rectangle:
+					pos: self.pos
+					size: self.size
+			id: secondBox
+			Label:
+				font_hinting: 'light'		
+				id: luali
+				font_size: 20
+				max_lines: 1
+				text: "Path to dataset"
+				valign: 'middle'
+				halign: 'right'
+				color: (0, 0, 0, 1)
+				size_hint: (0.5,1)
+
+			TextInput:
+				multiline: False
+				valign: 'middle'	
+				id: pathInput
+				font_size: 20
+				# height: 40
+				text: "./dataset/test"
+				on_text: root.pathset()
+				size_hint: (0.5,1)
+
+		BoxLayout:
+			orientation: 'horizontal'
+			background_color: (1, 0, 1, 1)
+			padding: (root.width-150)/2 , 10
+			size_hint: (1, 0.2)
+			# canvas.before:
+		 #		Color:
+		 #			rgba: 1, 1, 0, 1
+		 #		Rectangle:
+		 #			pos: self.pos
+		 #			size: self.size
+			# pos_hint: {'center_x': 0.5}
+			Button:
+				# size_hint_y: None
+				# size_hint_x: None
+				# width: 30
+				id: beginButton 
+				# height: 30
+				# width: 100
+				text: "Begin"
+				# font_size: 20
+				valign: 'middle'
+				halign: 'center'
+				on_press: root.begin_phase_3()
+
+		BoxLayout:
+			orientation: 'horizontal'
+			size_hint: (1, 0.1)
+			ProgressBar:
+				max: 100
+				id: progressBarIndicator
+			Label:
+				id: progressLabel
+				default: "disco"
+				text: "0 %"
+				color: (0, 0, 0, 1)
+
+		BoxLayout:
+			orientation: 'horizontal'
+			size_hint: (1, 0.1)
+			id: statusBox
+			
+			Button:
+				size_hint: (0.2,1)
+				background_color: [0.3, 0.3, 0.3, 0.7]
+				text: "Back"	
+				id: backBut
+				on_press:
+					root.manager.transition.direction = 'right'
+	                root.manager.current = 'third_screen'
+			Label:
+				id: statusBar
+				# font_size: 15
+				text: " Ready..."
+				valign: 'middle'
+				max_lines: 1
+				color: (0.3, 0.2, 0.2, 1)
+				# size_hint_y: None
+				size_hint: (0.6,1)
+				# height:10
+			Button:
+				id: nextBut
+				size_hint: (0.2,1)
+				background_color: [0.3, 0.3, 0.3, 0.7]
+				text: "Next"
+				# on_press:
+				# 	root.manager.transition.direction = 'left'
+	   #              root.manager.current = 'fifth_screen'	

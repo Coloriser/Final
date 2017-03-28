@@ -18,11 +18,12 @@ from kivy.uix.progressbar import ProgressBar
 from kivy.uix.image import Image
 from kivy.animation import Animation
 from kivy.clock import Clock
+from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
 
 
 
 from threading import Thread,Event
-from multiprocessing import Process, Queue
+# from multiprocessing import Process, Queue
 from time import sleep
 import os
 
@@ -30,6 +31,7 @@ import os
 # sys.path.insert(0, './..')
 import pre_works_train as phase1
 import create_model as phase2
+import pre_works_test as phase3
 
 
 
@@ -38,7 +40,7 @@ class splashClass(FloatLayout):
 	"""docstring for splashClass"""
 	def callSecondScreen(self, *args):
 		self.clear_widgets()
-		self.add_widget( secondClass())
+		self.add_widget( screenClass())
 
 
 	def secondSplash(self,  *args):
@@ -64,7 +66,7 @@ class splashClass(FloatLayout):
 
 
 
-class secondClass(BoxLayout):
+class secondClass(Screen):
 	path = './dataset/train'
 	def __init__(self, **kwargs):
 		# self.path = './dataset/train'
@@ -90,23 +92,21 @@ class secondClass(BoxLayout):
 		callBack_to_update = self.updateBar
 		Thread( target = phase1.begin_threaded_execution, args=(callBack_to_call, self.path, callBack_to_update)).start()
 
-		# phase1.begin_threaded_execution(queue, self.path)
-
-	def callThirdScreen(self, *args):
-		self.clear_widgets()
-		# print("Great Father")
-		self.add_widget( thirdClass())	
+	# def callThirdScreen(self, *args):
+	# 	self.clear_widgets()
+	# 	# print("Great Father")
+	# 	self.add_widget( thirdClass())	
 
 	def begin_phase_1(self):
-		queue = Queue()
-		queue.put(0)
+		# queue = Queue()
+		# queue.put(0)
 		self.ids.progressLabel.text = "begin disco"
 		self.ids.statusBar.text = "Preprocessing  .  .  ."
 		self.ids.nextBut.disabled = True
 		self.ids.beginButton.disabled = True		
 		self.sublu()
 
-class thirdClass( BoxLayout ):
+class thirdClass( Screen ):
 	"""docstring for thirdClass"""
 	def __init__(self, **kwargs):
 		super(thirdClass, self).__init__(**kwargs)
@@ -119,10 +119,15 @@ class thirdClass( BoxLayout ):
 		self.ids.backBut.disabled = False
 
 
-	def callSecondScreen(self, *args):
-		self.clear_widgets()
-		# print("Great Father")
-		self.add_widget( secondClass() ) 	
+	# def callSecondScreen(self, *args):
+	# 	self.clear_widgets()
+	# 	# print("Great Father")
+	# 	self.add_widget( secondClass() ) 	
+
+	# def callFourthScreen(self, *args):
+	# 	self.clear_widgets()
+	# 	# print("Great Father")
+	# 	self.add_widget( fourthClass() ) 		
 		
 
 	def begin_phase_2a(self):
@@ -144,13 +149,72 @@ class thirdClass( BoxLayout ):
 		self.ids.statusBox.text = "Creating b_model"
 
 
+
+
+
+class fourthClass(Screen):
+	path = './dataset/test'
+	def __init__(self, **kwargs):
+		super(fourthClass, self).__init__(**kwargs)
+
+	def pathset(self):
+		self.path = self.ids.pathInput.text
+		print("New PATH: ",self.path)
+
+	def callBack(self, image_no):
+		self.ids.statusBar.text = "Preprocessing of "+image_no+" images complete."
+		self.ids.nextBut.disabled = False
+		self.ids.backBut.disabled = False
+
+	def updateBar(self, x):
+		self.ids.progressBarIndicator.value = x
+		self.ids.progressLabel.text = str(x) + '%'
+		
+
+	def lasagu(self ):
+		# pid=os.fork()
+		# if pid:
+		callBack_to_call = self.callBack
+		callBack_to_update = self.updateBar
+		Thread( target = phase3.begin_threaded_execution, args=(callBack_to_call, self.path, callBack_to_update)).start()
+
+		# phase1.begin_threaded_execution(queue, self.path)
+
+	# def callThirdScreen(self, *args):
+	# 	self.clear_widgets()
+	# 	# print("Great Father")
+	# 	self.add_widget( thirdClass())	
+
+	def begin_phase_3(self):
+		self.ids.progressLabel.text = "begin disco"
+		self.ids.statusBar.text = "Preprocessing  .  .  ."
+		self.ids.nextBut.disabled = True
+		self.ids.backBut.disabled = True
+		self.ids.beginButton.disabled = True		
+		self.lasagu()
+
+class screenClass(ScreenManager):
+	"""docstring for screenClass"""
+	def __init__(self, **kwargs):
+		super(screenClass, self).__init__(**kwargs)
+		self.transition=SlideTransition()
+		screen1 = secondClass(name='second_screen')
+		screen2 = thirdClass(name='third_screen')
+		screen3 = fourthClass(name='fourth_screen')
+		self.add_widget(screen1)
+		self.add_widget(screen2)
+		self.add_widget(screen3)
+
+
+
+
 class ColoriserGUIApp(App):
-
-
 	def build(self):
 		return splashClass()
 		# return secondClass()
 		# return thirdClass()
+		# return fourthClass()
+		# return screenClass()
 
 if __name__ == '__main__':
 	ColoriserGUIApp().run()
