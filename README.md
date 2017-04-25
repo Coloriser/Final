@@ -22,6 +22,6 @@ Repository to test out creating a custom model for TensorFlow
 
 ###### Documentation:
 
-Design document, [here](https://github.com/Coloriser/Final/raw/master/Documentation/Final%20report.pdf).
+Design document, [here](https://github.com/Coloriser/Final/raw/master/Documentation/design-document.pdf).
 
-Final presentation, [here](https://github.com/Coloriser/Final/raw/master/Documentation/design-document.pdf).
+Final presentation, [here](https://github.com/Coloriser/Final/raw/master/Documentation/Final%20report.pdf).
