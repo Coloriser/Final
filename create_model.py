@@ -27,18 +27,18 @@ def make_model(x, y):
 	print("Y :",y.shape)
 
 
-	# # Building convolutional network
-	# network = input_data(shape=[None, x.shape[1], x.shape[2], 1], name='input')
+	# Building convolutional network
+	network = input_data(shape=[None, x.shape[1], x.shape[2], 1], name='input')
 
-	# #1
-	# network = fully_connected(network, 128, activation='sigmoid')
-	# network = dropout(network, 0.8)
-	# print(network)
-	# #2
-	# network = fully_connected(network, 128, activation='sigmoid')
-	# network = dropout(network, 0.8)
-	# print(network)
-	# #3
+	#1
+	network = fully_connected(network, 128, activation='sigmoid')
+	network = dropout(network, 0.8)
+	print(network)
+	#2
+	network = fully_connected(network, 128, activation='sigmoid')
+	network = dropout(network, 0.8)
+	print(network)
+	#3
 	# network = fully_connected(network, 128, activation='sigmoid')
 	# network = dropout(network, 0.8)
 	# print(network)
@@ -64,36 +64,11 @@ def make_model(x, y):
 	# network = fully_connected(network, 128, activation='sigmoid')
 	# network = dropout(network, 0.8)
 
-	# network = fully_connected(network, y.shape[1], activation='sigmoid')
-	# network = regression(network, optimizer='adam', learning_rate=0.01,
-	#                      loss='categorical_crossentropy', name='target')
-
-	# # Training
-	# model = tflearn.DNN(network, tensorboard_verbose=2)
-	# model.fit({'input': x}, {'target': y} , n_epoch=2)
-
-	# return model
-
-	# Building convolutional network
-	network = input_data(shape=[None, x.shape[1], x.shape[2], 1], name='input')
-	# network = input_data(shape=[None, 229, 64, 1], name='input')
-
-
-	network = conv_2d(network, 32, 3, activation='relu')
-	network = conv_2d(network, 64, 3, activation='relu')
-	network = conv_2d(network, 128, 3, activation='relu')
-	network = conv_2d(network, 64, 3, activation='relu')
-	# network = conv_2d(network, 128, 3, activation='relu')
-	# network = conv_2d(network, 64, 3, activation='relu')
-	# network = conv_2d(network, 32, 3, activation='relu')
-
-	network = fully_connected(network, 128, activation='sigmoid')
-	network = dropout(network, 0.8)
-
 	network = fully_connected(network, y.shape[1], activation='sigmoid')
 	network = regression(network, optimizer='adam', learning_rate=0.01,
-						 loss='categorical_crossentropy', name='target')
+	                     loss='categorical_crossentropy', name='target')
 
+	
 
 	# Training
 	model = tflearn.DNN(network )

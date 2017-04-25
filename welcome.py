@@ -187,10 +187,13 @@ class fifthClass( Screen ):
 		super(fifthClass, self).__init__(**kwargs)
 
 	def callBack(self, model_name):
-		self.ids.statusBox.text = "Model " + model_name +" created"
+		callBack_to_call = self.callBack
+		self.ids.statusBox.text = "Model a created"
 		if(model_name=='b'):
-			Thread( target = phase4.start, args=('a',(callBack_to_call),)).start()
+			self.ids.statusBox.text = "B completed"
+			Thread( target = phase4.start, args=('ab',(callBack_to_call),)).start()
 		elif model_name=='ab':
+			self.ids.statusBox.text = "AB completed"
 			self.ids.test_model_but.disabled = False
 			# self.ids.b_model_but.disabled = False
 			self.ids.nextBut.disabled = False
@@ -226,25 +229,25 @@ class sixthClass( Screen ):
 			self.ids.btn.text = base_name
 			base_name = "./predicted_images/" + base_name.split('_')[0]
 			imageGray.source = base_name+"_G.jpg"
-			imagePredicted.source = base_name + "_A.jpg"
-			imageGround.source = base_name + "_AB.jpg"
+			imagePredicted.source = base_name + "_B.jpg"
+			imageGround.source = base_name + "_GT.jpg"
 
-
-		loadImages(hfg.refineName(imageList[0]))
+		if(imageList != []):
+			loadImages(hfg.refineName(imageList[0]))
 		
-		# Name on default placeholder
-		dropdownIdentifier = self.ids.dropdown	
+			# Name on default placeholder
+			dropdownIdentifier = self.ids.dropdown	
 
 
-		def changeName(instance):
-			base_name = instance.text
-			loadImages(base_name)
+			def changeName(instance):
+				base_name = instance.text
+				loadImages(base_name)
 
-		for eachImage in imageList:
-			name = hfg.refineName(eachImage)
-			dropdownButton = Button(text=name, height='48dp', size_hint_y=None)
-			dropdownButton.bind(on_release=changeName)
-			dropdownIdentifier.add_widget(dropdownButton)
+			for eachImage in imageList:
+				name = hfg.refineName(eachImage)
+				dropdownButton = Button(text=name, height='48dp', size_hint_y=None)
+				dropdownButton.bind(on_release=changeName)
+				dropdownIdentifier.add_widget(dropdownButton)
 
 
 		# for i in range(1,5):

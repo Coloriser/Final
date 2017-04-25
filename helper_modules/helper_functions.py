@@ -102,44 +102,42 @@ def import_shape_from_pickle():
     return value["input_shape"], value["output_shape"]
 
 def normalize_array(feature_arr, mode="train"):		#to normalize the shape of each numpy array in brisk array
-	minimum_shape = feature_arr[0].shape
+	# minimum_shape = feature_arr[0].shape
+	# modified_array=[]
+
+	# if mode == 'test':
+	# 	pickled_input_shape = import_shape_from_pickle()[0]
+	# 	minimum_shape = (pickled_input_shape[1],pickled_input_shape[2])
+
+	# # to find the minimum_shape
+	# for each_feature in feature_arr:
+	# 	if(each_feature.shape < minimum_shape):
+	# 		minimum_shape = each_feature.shape
+	# # to normalize brisk feature shape
+	# print("minimum_shape",minimum_shape)
+	# for each_feature in feature_arr:
+	# 		y = each_feature.copy()
+	# 		y.resize(minimum_shape)
+	# 		modified_array.append(y)
+
+	maximum_shape = (0,0)
 	modified_array=[]
 
 	if mode == 'test':
 		pickled_input_shape = import_shape_from_pickle()[0]
-		minimum_shape = (pickled_input_shape[1],pickled_input_shape[2])
+		maximum_shape = (pickled_input_shape[1],pickled_input_shape[2])
 
-	# to find the minimum_shape
+	# to find the maximum_shape
 	for each_feature in feature_arr:
-		if(each_feature.shape < minimum_shape):
-			minimum_shape = each_feature.shape
+		if(each_feature.shape > maximum_shape):
+			maximum_shape = each_feature.shape
 	# to normalize brisk feature shape
-	print("minimum_shape",minimum_shape)
 	for each_feature in feature_arr:
 			y = each_feature.copy()
-			y.resize(minimum_shape)
+			y.resize(maximum_shape)
 			modified_array.append(y)
-
-	# feature_arr_temp = modified_array[2]
-	# feature_arr_temp2 = modified_array[1]
-	# x = min(feature_arr_temp.shape[0], feature_arr_temp2.shape[0])
-	# y = min(feature_arr_temp.shape[1], feature_arr_temp2.shape[1])
-
-
-	# feature_arr_temp = feature_arr_temp[:x]
-	# for f in range(0,len(feature_arr_temp)):
-	# 	feature_arr_temp[f] = feature_arr_temp[f][:y]
-
-	# feature_arr_temp2 = feature_arr_temp2[:x]
-	# for f in range(0, len(feature_arr_temp2)):
-	# 	feature_arr_temp2[f] = feature_arr_temp2[f][:y]
-
-	# print feature_arr_temp[-1]
-	# print feature_arr_temp2[-1]
-
-	# if( feature_arr_temp.all() == feature_arr_temp2.all() ):
-	# 	print("TTTTRRRRUUUUEEE")	
 	return modified_array
+
 
 def reconstruct(l_arr,a_arr,b_arr, count, type):
 

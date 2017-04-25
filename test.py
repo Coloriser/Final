@@ -43,19 +43,22 @@ def load_model(path):
     x, y = hf.import_shape_from_pickle( )
 
     # Building convolutional network
-    network = input_data(shape=[None, x[1], x[2], 1], name='input')
+    network = input_data(shape=[None, 625, 128, 1], name='input')
+    # network = input_data(shape=[None, x[1], x[2], 1], name='input')
     print(network)
     
-    network = conv_2d(network, 32, 3, activation='relu')
-    network = conv_2d(network, 64, 3, activation='relu')
-    network = conv_2d(network, 128, 3, activation='relu')
-    network = conv_2d(network, 256, 3, activation='relu')
+    network = fully_connected(network, 128, activation='sigmoid')
+    network = dropout(network, 0.8)
+    print(network)
+    #2
+    network = fully_connected(network, 128, activation='sigmoid')
+    network = dropout(network, 0.8)
+    print(network)
     # network = conv_2d(network, 128, 3, activation='relu')
     # network = conv_2d(network, 64, 3, activation='relu')
     # network = conv_2d(network, 32, 3, activation='relu')
 
-    network = fully_connected(network, 128, activation='sigmoid')
-    network = dropout(network, 0.8)
+    
 
     network = fully_connected(network, y[1], activation='sigmoid')
     network = regression(network, optimizer='adam', learning_rate=0.01,
@@ -167,9 +170,9 @@ def main():
     # IF AB MODE
     print("Loading a_chroma")
     predictions_A = hf.load_from_pickle("predicted_a_chroma")
-    print("a_channel_chroma", predictions_A[0][1])
-    print("a_channel_chroma", predictions_A[1][1])
-    print("a_channel_chroma", predictions_A[2][1])
+    # print("a_channel_chroma", predictions_A[0][1])
+    # print("a_channel_chroma", predictions_A[1][1])
+    # print("a_channel_chroma", predictions_A[2][1])
 
 
     print("Loading b_chroma")
@@ -193,16 +196,18 @@ def start( mode, callbackFn):
         test_x = prereq_load_and_compute( SIFT = True )    
         predict_and_dump(test_x, mode)
         if(mode == 'a'):
+            print("A COMPLETED")            
             return callbackFn('b')
         else:
+            print("B COMPLETED")            
             return callbackFn('ab')
 
     # IF AB MODE
     print("Loading a_chroma")
     predictions_A = hf.load_from_pickle("predicted_a_chroma")
-    print("a_channel_chroma", predictions_A[0][1])
-    print("a_channel_chroma", predictions_A[1][1])
-    print("a_channel_chroma", predictions_A[2][1])
+    # print("a_channel_chroma", predictions_A[0][1])
+    # print("a_channel_chroma", predictions_A[1][1])
+    # print("a_channel_chroma", predictions_A[2][1])
 
 
     print("Loading b_chroma")
@@ -210,14 +215,23 @@ def start( mode, callbackFn):
     luminance_paths = hf.load_luminance_paths('test')
     print("loading luminance...")
     luminance = hf.load_luminance(luminance_paths)
+    empty_array = np.zeros((200,200))  
+
+    b_channel_paths = hf.load_b_channel_chroma_paths('test')
+    print("loading b channel chroma...")
+    b_channel_chromas = hf.load_b_channel_chroma(b_channel_paths)
+    a_channel_paths = hf.load_a_channel_chroma_paths('test')
+    print("loading a channel chroma...")
+    a_channel_chromas = hf.load_a_channel_chroma(a_channel_paths)
+
     for i in range(len(predictions_A)):
         a_channel_chroma = hf.scale_image(predictions_A[i])
         # print("a_channel_chroma", a_channel_chroma)
         b_channel_chroma = hf.scale_image(predictions_B[i])
         hf.reconstruct(luminance[i], a_channel_chroma,b_channel_chroma, i, 'AB')
         # to reconstruct grayscale images 
-        empty_array = np.zeros((200,200))  
         hf.reconstruct(luminance[i], empty_array,empty_array, i, 'G')
+        hf.reconstruct(luminance[i], a_channel_chromas[i],b_channel_chromas[i], i, 'GT')
 
 
     return callbackFn(mode)
