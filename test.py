@@ -46,36 +46,14 @@ def load_model(path):
     network = input_data(shape=[None, x[1], x[2], 1], name='input')
     print(network)
     
-    network = fully_connected(network, 128, activation='sigmoid')
-    network = dropout(network, 0.8)
-    print(network)
-    #2
-    network = fully_connected(network, 128, activation='sigmoid')
-    network = dropout(network, 0.8)
-    print(network)
-    #3
-    network = fully_connected(network, 128, activation='sigmoid')
-    network = dropout(network, 0.8)
-    print(network)
-    #4
-    network = fully_connected(network, 128, activation='sigmoid')
-    network = dropout(network, 0.8)
-    #5
-    network = fully_connected(network, 128, activation='sigmoid')
-    network = dropout(network, 0.8)
-    #6
-    network = fully_connected(network, 128, activation='sigmoid')
-    network = dropout(network, 0.8)
-    #7
-    network = fully_connected(network, 128, activation='sigmoid')
-    network = dropout(network, 0.8)
-    #8
-    network = fully_connected(network, 128, activation='sigmoid')
-    network = dropout(network, 0.8)
-    #9
-    network = fully_connected(network, 128, activation='sigmoid')
-    network = dropout(network, 0.8)
-    #10
+    network = conv_2d(network, 32, 3, activation='relu')
+    network = conv_2d(network, 64, 3, activation='relu')
+    network = conv_2d(network, 128, 3, activation='relu')
+    network = conv_2d(network, 256, 3, activation='relu')
+    # network = conv_2d(network, 128, 3, activation='relu')
+    # network = conv_2d(network, 64, 3, activation='relu')
+    # network = conv_2d(network, 32, 3, activation='relu')
+
     network = fully_connected(network, 128, activation='sigmoid')
     network = dropout(network, 0.8)
 
@@ -204,6 +182,42 @@ def main():
         # print("a_channel_chroma", a_channel_chroma)
         b_channel_chroma = hf.scale_image(predictions_B[i])
         hf.reconstruct(luminance[i], a_channel_chroma,b_channel_chroma, i, 'AB')
+        # to reconstruct grayscale images 
+        empty_array = np.zeros((200,200))  
+        hf.reconstruct(luminance[i], empty_array,empty_array, i, 'G')
 
 
-main()        
+def start( mode, callbackFn):
+
+    if(mode != 'ab') :   
+        test_x = prereq_load_and_compute( SIFT = True )    
+        predict_and_dump(test_x, mode)
+        if(mode == 'a'):
+            return callbackFn('b')
+        else:
+            return callbackFn('ab')
+
+    # IF AB MODE
+    print("Loading a_chroma")
+    predictions_A = hf.load_from_pickle("predicted_a_chroma")
+    print("a_channel_chroma", predictions_A[0][1])
+    print("a_channel_chroma", predictions_A[1][1])
+    print("a_channel_chroma", predictions_A[2][1])
+
+
+    print("Loading b_chroma")
+    predictions_B = hf.load_from_pickle("predicted_b_chroma")  
+    luminance_paths = hf.load_luminance_paths('test')
+    print("loading luminance...")
+    luminance = hf.load_luminance(luminance_paths)
+    for i in range(len(predictions_A)):
+        a_channel_chroma = hf.scale_image(predictions_A[i])
+        # print("a_channel_chroma", a_channel_chroma)
+        b_channel_chroma = hf.scale_image(predictions_B[i])
+        hf.reconstruct(luminance[i], a_channel_chroma,b_channel_chroma, i, 'AB')
+        # to reconstruct grayscale images 
+        empty_array = np.zeros((200,200))  
+        hf.reconstruct(luminance[i], empty_array,empty_array, i, 'G')
+
+
+    return callbackFn(mode)

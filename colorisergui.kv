@@ -1,3 +1,49 @@
+<firstClass>
+	BoxLayout:
+		orientation: "horizontal"
+		# padding: 10
+		canvas.before:
+			Color:
+				rgba: 0.9, 0.9, 0.9, 1
+			Rectangle:
+				pos: self.pos
+				size: self.size
+		BoxLayout:
+			orientation: 'vertical'
+			size_hint_x: 0.5
+			size_hint_y: 0.8
+			# padding: 20
+			Image:
+				source: "./train.png"
+				# allow_stretch: True
+				# size_hint_x: 0.5
+				halign: 'center'
+				size_hint: 0.5,0.5
+				# on_press: root.trainClick()
+				# pos_x: 100
+				
+			Label:
+				text: 'Train'
+				font_size: 75
+				color:[ 0, 0, 0, 1 ]
+				size_hint_y: 0.7
+
+		BoxLayout:
+			orientation:'vertical'
+			size_hint_x: 0.5
+			padding: 0.3
+			Image:
+				source: "./test.png"
+				size_hint: 0.5,0.5
+				halign: 'center'
+				# size_hint_y: 0.7
+				# allow_stretch: True
+			Label:
+				text: 'Test'
+				font_size: 75
+				size_hint_y: 0.3
+				color:[ 0, 0, 0, 1 ]
+			
 <secondClass>:
 	BoxLayout:
 		orientation: 'vertical'
@@ -127,7 +173,7 @@
 				# on_press: root.callThirdScreen()
 				on_press:
 					root.manager.transition.direction = 'left'
-	                root.manager.current = 'third_screen'
+					root.manager.current = 'third_screen'
 
 
 <thirdClass>:
@@ -217,10 +263,10 @@
 				size_hint: (0.2,1)
 				background_color: [0.3, 0.3, 0.3, 0.7]
 				text: "Back"	
-	            id: backBut
+				id: backBut
 				on_press:
 					root.manager.transition.direction = 'right'
-	                root.manager.current = 'second_screen'
+					root.manager.current = 'second_screen'
 
 			Label:
 				id: statusBox
@@ -234,7 +280,7 @@
 				id: nextBut
 				on_press:
 					root.manager.transition.direction = 'left'
-	                root.manager.current = 'fourth_screen'
+					root.manager.current = 'fourth_screen'
 
 
 
@@ -263,7 +309,6 @@
 				text: "COLORISER"
 				valign: 'middle'
 				color: (0.3, 0.2, 0.2, 1)
-				# size_hint_y: None
 				height: 75
 
 		BoxLayout:
@@ -372,7 +417,7 @@
 				id: backBut
 				on_press:
 					root.manager.transition.direction = 'right'
-	                root.manager.current = 'third_screen'
+					root.manager.current = 'third_screen'
 			Label:
 				id: statusBar
 				# font_size: 15
@@ -388,6 +433,234 @@
 				size_hint: (0.2,1)
 				background_color: [0.3, 0.3, 0.3, 0.7]
 				text: "Next"
-				# on_press:
-				# 	root.manager.transition.direction = 'left'
-	   #              root.manager.current = 'fifth_screen'	
+				on_press:
+					root.manager.transition.direction = 'left'
+					root.manager.current = 'fifth_screen'	
+
+<fifthClass>:
+	BoxLayout:
+		orientation: 'vertical'
+		padding: 10
+		spacing: 10
+		canvas.before:
+			Color:
+				rgba: 0.9, 0.9, 0.9, 1
+			Rectangle:
+				pos: self.pos
+				size: self.size
+		BoxLayout:
+			id:title1
+			orientation: 'horizontal'
+			size_hint: (1,0.4)
+			height: 25
+			# canvas.before:
+			# 	Color:
+			# 		rgba: 1, 1, 0, 1
+			# 	Rectangle:
+			# 		pos: self.pos
+			# 		size: self.size
+			Label:
+				font_size: 75
+				text: "COLORISER"
+				valign: 'middle'
+				color: (0.3, 0.2, 0.2, 1)
+		BoxLayout:
+			id:description1
+			orientation: 'horizontal'
+			padding: 0,20
+			size_hint: (1,0.3)
+			# canvas.before:
+			# 	Color:
+			# 		rgba: 0, 1, 0, 1
+			# 	Rectangle:
+			# 		pos: self.pos
+			# 		size: self.size
+			Label:
+				font_size: 25
+				# text: 'self.pos: ' + str(self.pos) + "description.pos: " + str(description.pos ) 
+				text: " Phase 4 of the project. Tests the image processed in the previous step."
+				valign: 'middle'
+
+				max_lines: 3
+				color: (0.3, 0.2, 0.2, 1)
+				height: 40		
+
+		BoxLayout:
+			orientation: 'horizontal'
+			# padding: 0,3,5,3
+			spacing: 10
+			size_hint: (1,0.2)
+			height: 40
+			id: secondBox
+			canvas.before:
+				Color:
+					rgba: 0.9, 0.9, 0.9, 1
+				Rectangle:
+					pos: self.pos
+					size: self.size
+			Button:
+				id: test_model_but
+				font_size: 20
+				text: "Begin Test"
+				valign: 'middle'
+				halign: 'right'
+				color: (1, 1, 1, 1)
+				on_press: root.beginTest()
+		BoxLayout:
+			orientation: 'horizontal'
+			# padding: 0,3,5,3
+			spacing: 10
+			size_hint: (1,0.1)
+			height: 40
+			Button:
+				size_hint: (0.2,1)
+				background_color: [0.3, 0.3, 0.3, 0.7]
+				text: "Back"	
+				id: backBut
+				on_press:
+					root.manager.transition.direction = 'right'
+					root.manager.current = 'fourth_screen'
+
+			Label:
+				id: statusBox
+				size_hint: (0.6,1)
+				text: "Ready"	
+				color: (0, 0, 0, 1)
+			Button:
+				size_hint: (0.2,1)
+				background_color: [0.3, 0.3, 0.3, 0.7]
+				text: "Next"
+				id: nextBut
+				on_press:
+					root.manager.transition.direction = 'left'
+					root.manager.current = 'sixth_screen'
+
+<sixthClass>:
+	__safe_id: [dropdown.__self__]
+	BoxLayout:
+		orientation: 'vertical'
+		padding: 10
+		spacing: 10
+		canvas.before:
+			Color:
+				rgba: 0.9, 0.9, 0.9, 1
+			Rectangle:
+				pos: self.pos
+				size: self.size
+		# size_hint_y: None
+		# height: '48dp'
+		BoxLayout:
+			id:title1
+			orientation: 'horizontal'
+			size_hint: (1,0.3)
+			# canvas.before:
+			# 	Color:
+			# 		rgba: 1, 1, 0, 1
+			# 	Rectangle:
+			# 		pos: self.pos
+			# 		size: self.size
+			Label:
+				size_hint: (1,0.8)
+				text: "COLORISER"
+				valign: 'middle'
+				font_size: 60
+				color: (0.3, 0.2, 0.2, 1)
+
+		BoxLayout:
+			id:title2
+			orientation: 'horizontal'
+			size_hint: (1,0.1)
+			Label:
+				size_hint: (0.34,1)
+				text: "Grayscale image"
+				# valign: 'middle'
+				color: (0.3, 0.2, 0.2, 1)
+			Label:
+				size_hint: (0.34,1)
+				text: "Predicted Image"
+				# valign: 'middle'
+				color: (0.3, 0.2, 0.2, 1)
+			Label:
+				size_hint: (0.3,1)
+				text: "Ground Truth"
+				# valign: 'middle'
+				color: (0.3, 0.2, 0.2, 1)	
+
+			
+		BoxLayout:
+			orientation: 'horizontal'
+			# padding: 0,3,5,3
+			spacing: 10
+			size_hint: (1,0.5)
+			height: 40
+			id: secondBox
+			canvas.before:
+				Color:
+					rgba: 0.9, 0.9, 0.9, 1
+				Rectangle:
+					pos: self.pos
+					size: self.size
+
+			Image:
+				id: imageGray
+				size_hint: (0.34,1)
+				source: './splash.png'
+
+			Image:
+				id: imagePredicted
+				size_hint: (0.34,1)
+				source: './splash.png'
+				# source: root.source
+
+				# create initial image to be 400 pixels width
+				# size: 400, 400 / self.image_ratio
+
+				# add shadow background
+				# canvas.before:
+				# 	Color:
+				# 		rgba: 1,1,1,1
+				# 	BorderImage:
+				# 		source: 'shadow32.png'
+				# 		# border: (36,36,36,36)
+				# 		size:(self.width+72, self.height+72)
+				# 		# pos: (-36,-36)
+			Image:
+				id: imageGround
+				size_hint: (0.34,1)
+				source: './splash.png'
+
+
+		BoxLayout:
+			orientation: 'horizontal'
+			# padding: 0,3,5,3
+			spacing: 10
+			size_hint: (1,0.1)
+			height: 40
+			Button:
+				size_hint: (0.2,1)
+				background_color: [0.3, 0.3, 0.3, 0.7]
+				text: "Back"	
+				id: backBut
+				on_press:
+					root.manager.transition.direction = 'right'
+					root.manager.current = 'fifth_screen'
+			Button:
+				size_hint: (0.6,1)
+				background_color: [0.3, 0.3, 0.3, 0.7]
+				text: "Back"	
+				id: btn
+				text: '-'
+				on_release: dropdown.open(self)
+
+				Widget:
+					on_parent: dropdown.dismiss()
+					# size_hint: (0.4,1)
+
+				DropDown:
+					id: dropdown
+			Button:
+				size_hint: (0.2,1)
+				background_color: [0.3, 0.3, 0.3, 0.7]
+				text: "Final"
+				id: nextBut
+				on_press: app.get_running_app().stop() 

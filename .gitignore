@@ -22,6 +22,8 @@ dataset/train/*
 dataset/test/*
 gui/*
 gui
+keras/*
+keras
 
 brisk_features
 model

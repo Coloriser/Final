@@ -1,7 +1,6 @@
 from kivy.app import App
 
-
-# from kivy.uix.pagelayout import PageLayout
+from kivy.uix.pagelayout import PageLayout
 
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
@@ -9,18 +8,12 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
-# from kivy.uix.scatter import Scatter
-# from kivy.uix.popup import Popup
-# from kivy.factory import Factory
-# from kivy.properties import ObjectProperty
 
 from kivy.uix.progressbar import ProgressBar
 from kivy.uix.image import Image
 from kivy.animation import Animation
 from kivy.clock import Clock
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
-
-
 
 from threading import Thread,Event
 # from multiprocessing import Process, Queue
@@ -32,8 +25,12 @@ import os
 import pre_works_train as phase1
 import create_model as phase2
 import pre_works_test as phase3
+import test as phase4
 
-
+import sys
+sys.path.insert(0, './helper_modules')
+import front_end_helper as hfg
+import helper_functions as hf
 
 
 class splashClass(FloatLayout):
@@ -41,6 +38,7 @@ class splashClass(FloatLayout):
 	def callSecondScreen(self, *args):
 		self.clear_widgets()
 		self.add_widget( screenClass())
+		# self.add_widget( firstClass() )
 
 
 	def secondSplash(self,  *args):
@@ -63,6 +61,17 @@ class splashClass(FloatLayout):
 		Clock.schedule_once(self.secondSplash, 5)
 		self.add_widget(wing)
 		return 
+
+
+class firstClass(BoxLayout):
+	"""docstring for firstClass"""
+	def __init__(self, **kwargs):
+		super(firstClass, self).__init__(**kwargs)
+
+	def trainClick(self):
+		print("YUMMY")	
+		
+
 
 
 
@@ -92,11 +101,6 @@ class secondClass(Screen):
 		callBack_to_update = self.updateBar
 		Thread( target = phase1.begin_threaded_execution, args=(callBack_to_call, self.path, callBack_to_update)).start()
 
-	# def callThirdScreen(self, *args):
-	# 	self.clear_widgets()
-	# 	# print("Great Father")
-	# 	self.add_widget( thirdClass())	
-
 	def begin_phase_1(self):
 		# queue = Queue()
 		# queue.put(0)
@@ -118,17 +122,6 @@ class thirdClass( Screen ):
 		self.ids.nextBut.disabled = False
 		self.ids.backBut.disabled = False
 
-
-	# def callSecondScreen(self, *args):
-	# 	self.clear_widgets()
-	# 	# print("Great Father")
-	# 	self.add_widget( secondClass() ) 	
-
-	# def callFourthScreen(self, *args):
-	# 	self.clear_widgets()
-	# 	# print("Great Father")
-	# 	self.add_widget( fourthClass() ) 		
-		
 
 	def begin_phase_2a(self):
 		callBack_to_call = self.callBack
@@ -178,12 +171,6 @@ class fourthClass(Screen):
 		callBack_to_update = self.updateBar
 		Thread( target = phase3.begin_threaded_execution, args=(callBack_to_call, self.path, callBack_to_update)).start()
 
-		# phase1.begin_threaded_execution(queue, self.path)
-
-	# def callThirdScreen(self, *args):
-	# 	self.clear_widgets()
-	# 	# print("Great Father")
-	# 	self.add_widget( thirdClass())	
 
 	def begin_phase_3(self):
 		self.ids.progressLabel.text = "begin disco"
@@ -193,6 +180,93 @@ class fourthClass(Screen):
 		self.ids.beginButton.disabled = True		
 		self.lasagu()
 
+
+class fifthClass( Screen ):
+	"""docstring for thirdClass"""
+	def __init__(self, **kwargs):
+		super(fifthClass, self).__init__(**kwargs)
+
+	def callBack(self, model_name):
+		self.ids.statusBox.text = "Model " + model_name +" created"
+		if(model_name=='b'):
+			Thread( target = phase4.start, args=('a',(callBack_to_call),)).start()
+		elif model_name=='ab':
+			self.ids.test_model_but.disabled = False
+			# self.ids.b_model_but.disabled = False
+			self.ids.nextBut.disabled = False
+			self.ids.backBut.disabled = False
+
+	def beginTest(self):
+		callBack_to_call = self.callBack
+		self.ids.test_model_but.disabled = False
+		# self.ids.b_model_but.disabled = True
+		self.ids.nextBut.disabled = True
+		self.ids.backBut.disabled = True
+		Thread( target = phase4.start, args=('a',(callBack_to_call),)).start()
+		self.ids.statusBox.text = "Creating a_model"
+		
+	
+class sixthClass( Screen ):
+	"""docstring for thirdClass"""
+	callBack_to_call = 0
+
+	def __init__(self, **kwargs):
+		super(sixthClass, self).__init__(**kwargs)
+		callBack_to_call =  self.callBack
+		# initialise references
+		imageGray = self.ids.imageGray
+		imagePredicted = self.ids.imagePredicted
+		imageGround = self.ids.imageGround
+
+
+		imageList = []
+		imageList = hfg.getAndFilterPaths( )
+
+		def loadImages(base_name):	
+			self.ids.btn.text = base_name
+			base_name = "./predicted_images/" + base_name.split('_')[0]
+			imageGray.source = base_name+"_G.jpg"
+			imagePredicted.source = base_name + "_A.jpg"
+			imageGround.source = base_name + "_AB.jpg"
+
+
+		loadImages(hfg.refineName(imageList[0]))
+		
+		# Name on default placeholder
+		dropdownIdentifier = self.ids.dropdown	
+
+
+		def changeName(instance):
+			base_name = instance.text
+			loadImages(base_name)
+
+		for eachImage in imageList:
+			name = hfg.refineName(eachImage)
+			dropdownButton = Button(text=name, height='48dp', size_hint_y=None)
+			dropdownButton.bind(on_release=changeName)
+			dropdownIdentifier.add_widget(dropdownButton)
+
+
+		# for i in range(1,5):
+		# 	src = "http://placehold.it/480x270.png&text=slide-%d&.png" % i
+		# 	#load images asynchronously
+		# 	image = Factory.AsyncImage(source=src, allow_stretch=True)
+		# 	# self.ids.carousel.add_widget(image)
+		
+
+
+
+	def callBack(self, model_name):
+		# self.ids.statusBox.text = "Model " + model_name +" created"
+		if(model_name=='b'):
+			Thread( target = phase4.start, args=('a',(callBack_to_call),)).start()
+		elif model_name=='ab':
+			self.ids.test_model_but.disabled = False
+			# self.ids.b_model_but.disabled = False
+			self.ids.nextBut.disabled = False
+			self.ids.backBut.disabled = False
+
+
 class screenClass(ScreenManager):
 	"""docstring for screenClass"""
 	def __init__(self, **kwargs):
@@ -201,9 +275,13 @@ class screenClass(ScreenManager):
 		screen1 = secondClass(name='second_screen')
 		screen2 = thirdClass(name='third_screen')
 		screen3 = fourthClass(name='fourth_screen')
+		screen4 = fifthClass(name='fifth_screen')
+		screen5 = sixthClass(name='sixth_screen')
 		self.add_widget(screen1)
 		self.add_widget(screen2)
 		self.add_widget(screen3)
+		self.add_widget(screen4)
+		self.add_widget(screen5)
 
 
 
@@ -213,8 +291,10 @@ class ColoriserGUIApp(App):
 		return splashClass()
 		# return secondClass()
 		# return thirdClass()
-		# return fourthClass()
+		# return firstClass()
 		# return screenClass()
+		# return fifthClass()
+		# return sixthClass()
 
 if __name__ == '__main__':
 	ColoriserGUIApp().run()
