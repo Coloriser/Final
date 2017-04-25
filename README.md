@@ -20,7 +20,7 @@ Repository to test out creating a custom model for TensorFlow
 
         sh delete_temps.sh
 
-###### Documentation
+###### Documentation:
 
 Design document, [here](https://github.com/Coloriser/Final/raw/master/Documentation/Final%20report.pdf).
 
