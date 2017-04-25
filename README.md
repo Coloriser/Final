@@ -19,3 +19,9 @@ Repository to test out creating a custom model for TensorFlow
 2: For clearing temp files and model.
 
         sh delete_temps.sh
+
+###### Documentation
+
+Design document, [here](https://github.com/Coloriser/Final/raw/master/Documentation/Final%20report.pdf).
+
+Final presentation, [here](https://github.com/Coloriser/Final/raw/master/Documentation/design-document.pdf).
